@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 		}
 
 		tokens = parse_args(lineptr);
-		cmd_execute(tokens);
+		cmd_execute(tokens, lineptr);
 
 		free(lineptr);
 		free(tokens);

@@ -18,8 +18,8 @@
 int main(int argc, char **argv);
 char *read_line(void);
 char **parse_args(char *line_ptr);
-int cmd_execute(char **tokens);
-int fullpath_execution(char **tokens);
+int cmd_execute(char **tokens, char *lineptr);
+int fullpath_execution(char **tokens, char *lineptr);
 void cmd_error(char *arg);
 
 

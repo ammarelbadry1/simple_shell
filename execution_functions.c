@@ -8,7 +8,7 @@
  *
  * Return: 1 on Success to make infiniti loop continue
  */
-int cmd_execute(char **tokens)
+int cmd_execute(char **tokens, char *lineptr)
 {
 	char *slash = NULL;
 	int checker = 1;
@@ -25,7 +25,7 @@ int cmd_execute(char **tokens)
 	slash = _strchr(tokens[0], '/');
 	if (slash)
 	{
-		checker = fullpath_execution(tokens);
+		checker = fullpath_execution(tokens, lineptr);
 		return (checker);
 	}
 
@@ -40,7 +40,7 @@ int cmd_execute(char **tokens)
  *
  * Return: 1 on Success
  */
-int fullpath_execution(char **tokens)
+int fullpath_execution(char **tokens, char *lineptr)
 {
 	pid_t pid;
 	int status;
@@ -56,6 +56,9 @@ int fullpath_execution(char **tokens)
 		if (execve(tokens[0], tokens, NULL) == -1)
 		{
 			cmd_error(tokens[0]);
+			free(tokens);
+			free(lineptr);
+			exit(EXIT_FAILURE);
 		}
 	}
 	else
@@ -78,12 +81,11 @@ void cmd_error(char *arg)
 {
 	char *error = NULL;
 
-	error = malloc(_strlen(arg) + 22);
+	error = malloc(_strlen(arg) + 40);
 	_strcpy(error, "./hsh: 1: ");
 	_strcat(error, arg);
 	_strcat(error, ": not found\n");
 	write(STDERR_FILENO, error, _strlen(error));
 
 	free(error);
-	exit(EXIT_FAILURE);
 }
