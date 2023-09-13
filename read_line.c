@@ -21,12 +21,5 @@ char *read_line(void)
 		exit(EXIT_SUCCESS);
 	}
 
-	/*handle case of no input "pressing ENTER"*/
-	if (!buffer || buffer[0] == '\n')
-	{
-		free(buffer);
-		return (NULL);
-	}
-
 	return (buffer);
 }

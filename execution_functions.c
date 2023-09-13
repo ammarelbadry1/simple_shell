@@ -13,7 +13,7 @@ int cmd_execute(char **tokens, char *lineptr)
 	char *slash = NULL;
 	int checker = 1;
 
-	/*handle case of empty input*/
+	/*handle case of spaces*/
 	if (tokens == NULL || tokens[0] == NULL)
 		return (1);
 
