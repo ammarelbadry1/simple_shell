@@ -1,4 +1,5 @@
 .vscode
 a.out
-run.bash
+crun.bash
 git_push.bash
+tmp

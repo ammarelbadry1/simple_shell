@@ -10,21 +10,36 @@
  */
 int cmd_execute(char **tokens, char *lineptr)
 {
-	char *slash = NULL;
+	char *slash = NULL, *path;
 	int checker = 1;
 
+	(void) slash;
 	/*handle case of spaces*/
 	if (tokens == NULL || tokens[0] == NULL)
 		return (1);
 
 	/*check if command built-in*/
 
-	/*check if command not in a full path*/
-
+	/*
+	path = check_cmd_in_PATH(tokens[0]);
+	if (path)
+		tokens[0] = path;
+	
+	checker = fullpath_execution(tokens, lineptr);
+	return (checker);
+	*/
 	/*check if command sent in full path*/
 	slash = _strchr(tokens[0], '/');
 	if (slash)
 	{
+		checker = fullpath_execution(tokens, lineptr);
+		return (checker);
+	}
+	/*check if command sent not in a full path*/
+	else
+	{
+		path = check_cmd_in_PATH(tokens[0]);
+		tokens[0] = path;
 		checker = fullpath_execution(tokens, lineptr);
 		return (checker);
 	}
@@ -58,7 +73,7 @@ int fullpath_execution(char **tokens, char *lineptr)
 			cmd_error(tokens[0]);
 			free(tokens);
 			free(lineptr);
-			exit(EXIT_FAILURE);
+			exit(127);
 		}
 	}
 	else
@@ -86,6 +101,5 @@ void cmd_error(char *arg)
 	_strcat(error, arg);
 	_strcat(error, ": not found\n");
 	write(STDERR_FILENO, error, _strlen(error));
-
 	free(error);
 }
