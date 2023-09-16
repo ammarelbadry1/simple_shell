@@ -14,22 +14,41 @@
 
 extern char **environ;
 
-/*shell functions prototypes*/
+/**
+* struct builtin - structure to handle builtin commands
+* @cmd: user command
+* @func: function that handle builtin
+*/
+typedef struct builtin
+{
+	char *cmd;
+	int (*builtin_func)(char **, char *, char **);
+} builtin_t;
+
+/*--shell functions prototypes--*/
+/****************************/
+/*handle user input*/
 char *read_line(void);
 char **parse_args(char *line_ptr);
+char *handle_comment(char *line_ptr);
+
+/*handle and execute path*/
 int cmd_execute(char **tokens, char *lineptr, char **env);
-int fullpath_execution(char **tokens, char *lineptr);
-void cmd_error(char *arg);
 char *_getenv(char *name);
 char *check_cmd_in_PATH(char *cmd);
-void handle_env(char **env);
+int fullpath_execution(char **tokens, char *lineptr);
+void cmd_error(char *arg);
+
+
+/*handle built-in*/
+int (*Isbuiltin(char *command))(char **, char *, char **);
+int exit_cmd(char **tokens, char *lineptr, char **env);
+int handle_env(char **tokens, char *lineptr, char **env);
+void exit_error(char *arg);
 
 
 
-
-
-
-/*string functions prototypes*/
+/*--string functions prototypes--*/
 char *_strchr(char *str, char c);
 size_t _strlen(const char *str);
 char *_strcpy(char *dest, char *src);
@@ -37,6 +56,12 @@ char *_strcat(char *dest, const char *src);
 char *_strdup(char *str);
 int _strcmp(char *s1, char *s2);
 char *str_concat(char *s1, char *s2);
+char *_strncpy(char *dest, char *src, int n);
 void _puts(char *str);
+
+/*--more functions--*/
+int _isdigit(char *str);
+int _atoi(const char *str);
+
 
 #endif

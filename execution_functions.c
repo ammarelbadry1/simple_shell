@@ -12,17 +12,21 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
 {
 	char *slash = NULL, *path;
 	int shell_exit_flag = 1;
-
+	int (*check_builtin)(char **, char *, char **);
 	(void) slash;
+
 	/*handle case of spaces*/
 	if (tokens == NULL || tokens[0] == NULL)
 		return (1);
 
 	/*check if command built-in*/
-	if (_strcmp(tokens[0], "exit") == 0)
-		return (shell_exit_flag = 0);
-	if (_strcmp(tokens[0], "env") == 0)
-		handle_env(env);
+	check_builtin = Isbuiltin(tokens[0]);
+	if (check_builtin)
+	{
+		shell_exit_flag = check_builtin(tokens, lineptr, env);
+		return (shell_exit_flag);
+	}
+
 	/*check if command sent in full path*/
 	slash = _strchr(tokens[0], '/');
 	if (slash)
@@ -34,9 +38,19 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
 	else
 	{
 		path = check_cmd_in_PATH(tokens[0]);
-		tokens[0] = path;
-		shell_exit_flag = fullpath_execution(tokens, lineptr);
-		return (shell_exit_flag);
+		if (!path)
+		{
+			cmd_error(tokens[0]);
+			free(tokens);
+			free(lineptr);
+			exit(127);
+		}
+		else
+		{
+			tokens[0] = path;
+			shell_exit_flag = fullpath_execution(tokens, lineptr);
+			return (shell_exit_flag);
+		}
 	}
 
 	return (1);
@@ -66,9 +80,10 @@ int fullpath_execution(char **tokens, char *lineptr)
 		if (execve(tokens[0], tokens, NULL) == -1)
 		{
 			cmd_error(tokens[0]);
-			(void) lineptr;
-			/*free(tokens);*/
-			/*free(lineptr);*/
+			/*(void) lineptr;*/
+			free(tokens);
+			free(lineptr);
+			exit(127);
 		}
 	}
 	else
@@ -96,6 +111,6 @@ void cmd_error(char *arg)
 	_strcat(error, arg);
 	_strcat(error, ": not found\n");
 	write(STDERR_FILENO, error, _strlen(error));
-	/*exit(127);*/
+	
 	free(error);
 }

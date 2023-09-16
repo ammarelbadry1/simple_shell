@@ -60,6 +60,6 @@ char *check_cmd_in_PATH(char *cmd)
 		}
 		token = strtok(NULL, ":");
 	}
-	cmd_error(cmd);
+	/*cmd_error(cmd);*/
 	return (NULL);
 }
