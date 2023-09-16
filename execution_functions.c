@@ -8,10 +8,10 @@
  *
  * Return: 1 on Success to make infiniti loop continue
  */
-int cmd_execute(char **tokens, char *lineptr)
+int cmd_execute(char **tokens, char *lineptr, char **env)
 {
 	char *slash = NULL, *path;
-	int checker = 1;
+	int shell_exit_flag = 1;
 
 	(void) slash;
 	/*handle case of spaces*/
@@ -19,29 +19,24 @@ int cmd_execute(char **tokens, char *lineptr)
 		return (1);
 
 	/*check if command built-in*/
-
-	/*
-	path = check_cmd_in_PATH(tokens[0]);
-	if (path)
-		tokens[0] = path;
-	
-	checker = fullpath_execution(tokens, lineptr);
-	return (checker);
-	*/
+	if (_strcmp(tokens[0], "exit") == 0)
+		return (shell_exit_flag = 0);
+	if (_strcmp(tokens[0], "env") == 0)
+		handle_env(env);
 	/*check if command sent in full path*/
 	slash = _strchr(tokens[0], '/');
 	if (slash)
 	{
-		checker = fullpath_execution(tokens, lineptr);
-		return (checker);
+		shell_exit_flag = fullpath_execution(tokens, lineptr);
+		return (shell_exit_flag);
 	}
 	/*check if command sent not in a full path*/
 	else
 	{
 		path = check_cmd_in_PATH(tokens[0]);
 		tokens[0] = path;
-		checker = fullpath_execution(tokens, lineptr);
-		return (checker);
+		shell_exit_flag = fullpath_execution(tokens, lineptr);
+		return (shell_exit_flag);
 	}
 
 	return (1);
@@ -71,9 +66,9 @@ int fullpath_execution(char **tokens, char *lineptr)
 		if (execve(tokens[0], tokens, NULL) == -1)
 		{
 			cmd_error(tokens[0]);
-			free(tokens);
-			free(lineptr);
-			exit(127);
+			(void) lineptr;
+			/*free(tokens);*/
+			/*free(lineptr);*/
 		}
 	}
 	else
@@ -101,5 +96,6 @@ void cmd_error(char *arg)
 	_strcat(error, arg);
 	_strcat(error, ": not found\n");
 	write(STDERR_FILENO, error, _strlen(error));
+	/*exit(127);*/
 	free(error);
 }

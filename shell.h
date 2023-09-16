@@ -12,17 +12,17 @@
 #define BUFSIZE  1024
 #define DELIMETERS " \n\t\r\a"
 
-
+extern char **environ;
 
 /*shell functions prototypes*/
-int main(int argc, char **argv);
 char *read_line(void);
 char **parse_args(char *line_ptr);
-int cmd_execute(char **tokens, char *lineptr);
+int cmd_execute(char **tokens, char *lineptr, char **env);
 int fullpath_execution(char **tokens, char *lineptr);
 void cmd_error(char *arg);
 char *_getenv(char *name);
 char *check_cmd_in_PATH(char *cmd);
+void handle_env(char **env);
 
 
 
@@ -37,5 +37,6 @@ char *_strcat(char *dest, const char *src);
 char *_strdup(char *str);
 int _strcmp(char *s1, char *s2);
 char *str_concat(char *s1, char *s2);
+void _puts(char *str);
 
 #endif

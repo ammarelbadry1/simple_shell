@@ -1,7 +1,5 @@
 #include "shell.h"
 
-extern char **environ;
-
 /**
  * _getenv - get an environment variable
  *
@@ -44,7 +42,7 @@ char *_getenv(char *name)
  * @cmd: the command to be checked
  *
  * Return: on success returns the command path
- * on failure returns 
+ * on failure returns
 */
 char *check_cmd_in_PATH(char *cmd)
 {

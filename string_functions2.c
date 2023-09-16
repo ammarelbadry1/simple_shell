@@ -111,3 +111,22 @@ char *str_concat(char *s1, char *s2)
 	}
 	return (my_str);
 }
+
+/**
+ * _puts - prints a string followed by a new line
+ *
+ * @str: String to be printed
+ *
+ * Return: no return
+*/
+
+void _puts(char *str)
+{
+	size_t len;
+
+	len = 0;
+	while (str[len] != '\0')
+		len++;
+	write(STDOUT_FILENO, str, len);
+	write(STDOUT_FILENO, "\n", 1);
+}

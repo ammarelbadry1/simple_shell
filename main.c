@@ -8,12 +8,13 @@
  *
  * Return: 0 on success
  */
-int main(int argc, char **argv)
+int main(int argc, char **argv, char **env)
 {
 	char *lineptr = NULL, **tokens = NULL;
+	int shell_exit_flag = 1;
 	(void) argc, (void) argv;
 
-	while (1)
+	while (shell_exit_flag)
 	{
 		/*print prompt sign*/
 		write(STDIN_FILENO, "($) ", 4);
@@ -27,7 +28,7 @@ int main(int argc, char **argv)
 		}
 
 		tokens = parse_args(lineptr);
-		cmd_execute(tokens, lineptr);
+		shell_exit_flag = cmd_execute(tokens, lineptr, env);
 
 		free(lineptr);
 		free(tokens);
