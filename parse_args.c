@@ -11,7 +11,7 @@
 char **parse_args(char *line_ptr)
 {
 	char *token = NULL, **args = NULL;
-	char *comment = NULL;
+	char *comment = NULL, *temp = NULL;
 	int i = 0;
 
 	/*allocate memory for pointer that point to first string of user input*/
@@ -30,7 +30,14 @@ char **parse_args(char *line_ptr)
 	}
 	comment = _strchr(line_ptr, '#');
 	if (comment && *(comment - 1) == ' ')
-		line_ptr = handle_comment(line_ptr);
+	{
+		printf("%p\n", line_ptr);
+		temp = line_ptr;
+		printf("%p\n", temp);
+		line_ptr = handle_comment(temp);
+		free(temp);
+		printf("%p\n", line_ptr);
+	}
 
 	/*tokenize user command and add null if found one of delimeters*/
 	token = strtok(line_ptr, DELIMETERS);

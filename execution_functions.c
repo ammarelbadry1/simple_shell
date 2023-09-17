@@ -15,7 +15,6 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
 	char *slash = NULL, *path;
 	int shell_exit_flag = 1, path_var_access_flag = 0;
 	int (*check_builtin)(char **, char *, char **);
-	(void) slash;
 
 	/*handle case of spaces*/
 	if (tokens == NULL || tokens[0] == NULL)
@@ -30,8 +29,9 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
 	}
 
 	/*check if command sent in full path*/
-	slash = _strchr(tokens[0], '/');
-	if (slash)
+	/*slash = _strchr(tokens[0], '/');*/
+	(void) slash;
+	if (access(tokens[0], X_OK) == 0)
 	{
 		shell_exit_flag = fullpath_execution(tokens, lineptr, path_var_access_flag);
 		return (shell_exit_flag);
