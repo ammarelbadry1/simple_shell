@@ -1,5 +1,13 @@
 #include "shell.h"
 
+/**
+ * Isbuiltin - map the input to the corresponding built-in function
+ *
+ * @command: the command to be mapped
+ *
+ * Return: On success returns a function pointer to the requested
+ * function. On failure returns NULL
+ */
 int (*Isbuiltin(char *command))(char **, char *, char **)
 {
 	builtin_t my_builtin[] = {
@@ -20,6 +28,8 @@ int (*Isbuiltin(char *command))(char **, char *, char **)
 /**
  * handle_env - handle built-in commands
  *
+ * @tokens: Tokenized user input to be freed
+ * @lineptr: Raw user input to be freed
  * @env: current environment
  *
  * Return: no return
@@ -27,24 +37,33 @@ int (*Isbuiltin(char *command))(char **, char *, char **)
 int handle_env(char **tokens, char *lineptr, char **env)
 {
 	int i = 0;
-	(void) lineptr, (void) tokens;
+	(void) lineptr, (void) tokens, (void) env, (void) i;
 
 	while (env[i] != NULL)
 	{
 		_puts(env[i]);
 		i++;
 	}
-	free(tokens);
+	/*free(tokens);
 	free(lineptr);
-	exit(EXIT_SUCCESS);
+	exit(EXIT_SUCCESS);*/
+	return (1);
 }
 
+/**
+ * exit_cmd - handle exit command
+ *
+ * @tokens: Tokenized user input
+ * @lineptr: Raw user input to be freed
+ *
+ * Return: exit status
+ */
 int exit_cmd(char **tokens, char *lineptr, char **env)
 {
 	int status;
 	(void) env;
 
-    if (tokens[1])
+	if (tokens[1])
 	{
 		if (_isdigit(tokens[1]) == 0)
 		{
@@ -73,6 +92,13 @@ int exit_cmd(char **tokens, char *lineptr, char **env)
 	exit(EXIT_SUCCESS);
 }
 
+/**
+ * exit_error - check the passed argument to meet a certain criteria
+ *
+ * @arg: the argument passed
+ *
+ * Return: no return
+ */
 void exit_error(char *arg)
 {
 	char *error = NULL;

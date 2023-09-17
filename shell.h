@@ -17,7 +17,7 @@ extern char **environ;
 /**
 * struct builtin - structure to handle builtin commands
 * @cmd: user command
-* @func: function that handle builtin
+* @builtin_func: function that handle builtin
 */
 typedef struct builtin
 {
@@ -36,7 +36,7 @@ char *handle_comment(char *line_ptr);
 int cmd_execute(char **tokens, char *lineptr, char **env);
 char *_getenv(char *name);
 char *check_cmd_in_PATH(char *cmd);
-int fullpath_execution(char **tokens, char *lineptr);
+int fullpath_execution(char **tokens, char *lineptr, int path_var_access_flag);
 void cmd_error(char *arg);
 
 

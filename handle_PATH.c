@@ -11,7 +11,7 @@
 char *_getenv(char *name)
 {
 	char *env_var, **env;
-	int i, name_len, is_found = 0;
+	int i, is_found = 0;
 
 	env = environ;
 	i = 0;
@@ -24,11 +24,10 @@ char *_getenv(char *name)
 		{
 			env_var = _strdup(env[i]);
 			if (env_var == NULL)
+			{
+				free(env_var);
 				return (NULL);
-			name_len = 0;
-			while (name[name_len] != 0)
-				name_len++;
-			env_var += ++name_len;
+			}
 			return (env_var);
 		}
 		i++;
@@ -46,20 +45,34 @@ char *_getenv(char *name)
 */
 char *check_cmd_in_PATH(char *cmd)
 {
-	char *path, *token;
+	char *path_var, *cmd_path, *tmp;
 
-	path = _getenv("PATH");
-	token = strtok(path, ":");
-	while (token != NULL)
+	path_var = _getenv("PATH");
+	if (path_var == NULL)
 	{
-		token = str_concat(token, "/");
-		token = str_concat(token, cmd);
-		if (access(token, X_OK) == 0)
-		{
-			return (token);
-		}
-		token = strtok(NULL, ":");
+		free(path_var);
+		return (NULL);
 	}
-	/*cmd_error(cmd);*/
+	path_var += 5;
+	cmd_path = strtok(path_var, ":");
+	path_var -= 5;
+	while (cmd_path != NULL)
+	{
+		tmp = str_concat(cmd_path, "/");
+		if (tmp == NULL)
+		{
+			free(tmp);
+			return (NULL);
+		}
+		cmd_path = str_concat(tmp, cmd);
+		free(tmp);
+		if (access(cmd_path, X_OK) == 0)
+		{
+			free(path_var);
+			return (cmd_path);
+		}
+		free(cmd_path);
+		cmd_path = strtok(NULL, ":");
+	}
 	return (NULL);
 }

@@ -5,13 +5,15 @@
  *		and execute them
  *
  * @tokens: pointer to pointer of strings
+ * @lineptr: Raw user input to be freed
+ * @env: program environment to be used by env built-in
  *
  * Return: 1 on Success to make infiniti loop continue
  */
 int cmd_execute(char **tokens, char *lineptr, char **env)
 {
 	char *slash = NULL, *path;
-	int shell_exit_flag = 1;
+	int shell_exit_flag = 1, path_var_access_flag = 0;
 	int (*check_builtin)(char **, char *, char **);
 	(void) slash;
 
@@ -31,7 +33,7 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
 	slash = _strchr(tokens[0], '/');
 	if (slash)
 	{
-		shell_exit_flag = fullpath_execution(tokens, lineptr);
+		shell_exit_flag = fullpath_execution(tokens, lineptr, path_var_access_flag);
 		return (shell_exit_flag);
 	}
 	/*check if command sent not in a full path*/
@@ -48,7 +50,8 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
 		else
 		{
 			tokens[0] = path;
-			shell_exit_flag = fullpath_execution(tokens, lineptr);
+			path_var_access_flag = 1;
+			shell_exit_flag = fullpath_execution(tokens, lineptr, path_var_access_flag);
 			return (shell_exit_flag);
 		}
 	}
@@ -61,10 +64,11 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
  *		 user command with full path
  *
  * @tokens: pointer to pointer of strings
+ * @lineptr: Raw user input to be freed
  *
  * Return: 1 on Success
  */
-int fullpath_execution(char **tokens, char *lineptr)
+int fullpath_execution(char **tokens, char *lineptr, int path_var_access_flag)
 {
 	pid_t pid;
 	int status;
@@ -80,7 +84,6 @@ int fullpath_execution(char **tokens, char *lineptr)
 		if (execve(tokens[0], tokens, NULL) == -1)
 		{
 			cmd_error(tokens[0]);
-			/*(void) lineptr;*/
 			free(tokens);
 			free(lineptr);
 			exit(127);
@@ -88,6 +91,8 @@ int fullpath_execution(char **tokens, char *lineptr)
 	}
 	else
 	{
+		if (path_var_access_flag)
+			free(tokens[0]);
 		do {
 			waitpid(pid, &status, WUNTRACED);
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
@@ -98,6 +103,7 @@ int fullpath_execution(char **tokens, char *lineptr)
 
 /**
  * cmd_error - function that handle commands errors
+ *
  * @arg: pointer to user command
  *
  * Return: no return
@@ -111,6 +117,5 @@ void cmd_error(char *arg)
 	_strcat(error, arg);
 	_strcat(error, ": not found\n");
 	write(STDERR_FILENO, error, _strlen(error));
-	
 	free(error);
 }
