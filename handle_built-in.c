@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * Isbuiltin - map the input to the corresponding built-in function
+ * Isbuiltin - map the input command to the corresponding built-in function
  *
  * @command: the command to be mapped
  *
@@ -44,9 +44,6 @@ int handle_env(char **tokens, char *lineptr, char **env)
 		_puts(env[i]);
 		i++;
 	}
-	/*free(tokens);
-	free(lineptr);
-	exit(EXIT_SUCCESS);*/
 	return (1);
 }
 
@@ -55,6 +52,7 @@ int handle_env(char **tokens, char *lineptr, char **env)
  *
  * @tokens: Tokenized user input
  * @lineptr: Raw user input to be freed
+ * @env: passed just because of the function pointer "Isbuiltin" prototype
  *
  * Return: exit status
  */

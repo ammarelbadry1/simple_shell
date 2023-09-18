@@ -29,8 +29,8 @@ typedef struct builtin
 /****************************/
 /*handle user input*/
 char *read_line(void);
-char **parse_args(char *line_ptr);
-char *handle_comment(char *line_ptr);
+char **parse_args(char *lineptr);
+char *handle_comment(char *lineptr);
 
 /*handle and execute path*/
 int cmd_execute(char **tokens, char *lineptr, char **env);

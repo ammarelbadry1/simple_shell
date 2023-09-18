@@ -12,7 +12,7 @@
  */
 int cmd_execute(char **tokens, char *lineptr, char **env)
 {
-	char *slash = NULL, *path;
+	char *path;
 	int shell_exit_flag = 1, path_var_access_flag = 0;
 	int (*check_builtin)(char **, char *, char **);
 
@@ -27,16 +27,11 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
 		shell_exit_flag = check_builtin(tokens, lineptr, env);
 		return (shell_exit_flag);
 	}
-
-	/*check if command sent in full path*/
-	/*slash = _strchr(tokens[0], '/');*/
-	(void) slash;
 	if (access(tokens[0], X_OK) == 0)
 	{
 		shell_exit_flag = fullpath_execution(tokens, lineptr, path_var_access_flag);
 		return (shell_exit_flag);
 	}
-	/*check if command sent not in a full path*/
 	else
 	{
 		path = check_cmd_in_PATH(tokens[0]);
@@ -65,6 +60,8 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
  *
  * @tokens: pointer to pointer of strings
  * @lineptr: Raw user input to be freed
+ * @path_var_access_flag: a flag that indicates whether the path
+ * environment variable accessed or not
  *
  * Return: 1 on Success
  */
