@@ -62,7 +62,6 @@ char *handle_comment(char *lineptr)
 		;
 
 	lineptr[len] = '\0';
-	printf("lineptr => %s\n", lineptr);
 
 	return (lineptr);
 }
