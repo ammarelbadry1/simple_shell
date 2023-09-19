@@ -74,5 +74,7 @@ char *check_cmd_in_PATH(char *cmd)
 		free(cmd_path);
 		cmd_path = strtok(NULL, ":");
 	}
+	free(path_var);
+	free(cmd_path);
 	return (NULL);
 }
