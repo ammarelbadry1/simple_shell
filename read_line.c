@@ -18,7 +18,8 @@ char *read_line(void)
 	if (n_read == -1)
 	{
 		free(buffer);
-		exit(EXIT_SUCCESS);
+		exit_status = 0;
+		exit(exit_status);
 	}
 
 	return (buffer);

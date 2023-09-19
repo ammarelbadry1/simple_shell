@@ -58,7 +58,6 @@ int handle_env(char **tokens, char *lineptr, char **env)
  */
 int exit_cmd(char **tokens, char *lineptr, char **env)
 {
-	int status;
 	(void) env;
 
 	if (tokens[1])
@@ -68,26 +67,29 @@ int exit_cmd(char **tokens, char *lineptr, char **env)
 			exit_error(tokens[1]);
 			free(tokens);
 			free(lineptr);
-			exit(2);
+			exit_status = 2;
+			exit(exit_status);
 		}
 		else
 		{
-			status = _atoi(tokens[1]);
-			if (status < 0)
+			exit_status = _atoi(tokens[1]);
+			if (exit_status < 0)
 			{
 				free(tokens);
 				free(lineptr);
-				exit(2);
+				exit_status = 2;
+				exit(exit_status);
 			}
 			free(tokens);
 			free(lineptr);
-			exit(status);
+			exit(exit_status);
 		}
 	}
 
 	free(tokens);
 	free(lineptr);
-	exit(EXIT_SUCCESS);
+	exit_status = 0;
+	exit(exit_status);
 }
 
 /**
@@ -102,6 +104,11 @@ void exit_error(char *arg)
 	char *error = NULL;
 
 	error = malloc(_strlen(arg) + 40);
+	if (!error)
+	{
+		perror("malloc");
+		return;
+	}
 	_strcpy(error, "./hsh: 1: exit: Illegal number: ");
 	_strcat(error, arg);
 	_strcat(error, "\n");

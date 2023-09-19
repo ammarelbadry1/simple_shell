@@ -13,6 +13,7 @@
 #define DELIMETERS " \n\t\r\a"
 
 extern char **environ;
+extern int exit_status;
 
 /**
 * struct builtin - structure to handle builtin commands

@@ -35,5 +35,5 @@ int main(int argc, char **argv, char **env)
 		free(tokens);
 	}
 
-	return (0);
+	return (exit_status);
 }

@@ -1,5 +1,6 @@
 #include "shell.h"
 
+int	exit_status = 0;
 /**
  * cmd_execute - function that check user commands
  *		and execute them
@@ -19,7 +20,6 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
 	/*handle case of spaces*/
 	if (tokens == NULL || tokens[0] == NULL)
 		return (1);
-
 	/*check if command built-in*/
 	check_builtin = Isbuiltin(tokens[0]);
 	if (check_builtin)
@@ -40,7 +40,8 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
 			cmd_error(tokens[0]);
 			free(tokens);
 			free(lineptr);
-			exit(127);
+			exit_status = 127;
+			exit(exit_status);
 		}
 		else
 		{
@@ -50,7 +51,6 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
 			return (shell_exit_flag);
 		}
 	}
-
 	return (1);
 }
 
@@ -68,13 +68,14 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
 int fullpath_execution(char **tokens, char *lineptr, int path_var_access_flag)
 {
 	pid_t pid;
-	int status;
+	int child_status;
 
 	pid = fork();
 	if (pid < 0)
 	{
 		perror("fork");
-		exit(EXIT_FAILURE);
+		exit_status = EXIT_FAILURE;
+		exit(exit_status);
 	}
 	else if (pid == 0)
 	{
@@ -83,7 +84,8 @@ int fullpath_execution(char **tokens, char *lineptr, int path_var_access_flag)
 			cmd_error(tokens[0]);
 			free(tokens);
 			free(lineptr);
-			exit(127);
+			exit_status = 127;
+			exit(exit_status);
 		}
 	}
 	else
@@ -91,8 +93,9 @@ int fullpath_execution(char **tokens, char *lineptr, int path_var_access_flag)
 		if (path_var_access_flag)
 			free(tokens[0]);
 		do {
-			waitpid(pid, &status, WUNTRACED);
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+			waitpid(pid, &child_status, WUNTRACED);
+		} while (!WIFEXITED(child_status) && !WIFSIGNALED(child_status));
+		exit_status = WEXITSTATUS(child_status);
 	}
 
 	return (1);
@@ -110,6 +113,11 @@ void cmd_error(char *arg)
 	char *error = NULL;
 
 	error = malloc(_strlen(arg) + 40);
+	if (!error)
+	{
+		perror("malloc");
+		return;
+	}
 	_strcpy(error, "./hsh: 1: ");
 	_strcat(error, arg);
 	_strcat(error, ": not found\n");

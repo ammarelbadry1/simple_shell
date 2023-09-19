@@ -19,7 +19,7 @@ char **parse_args(char *lineptr)
 	if (!args)
 	{
 		perror("malloc");
-		exit(EXIT_FAILURE);
+		return (NULL);
 	}
 
 	/* handle case of comment '#' */
