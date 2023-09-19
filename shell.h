@@ -8,12 +8,12 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <string.h>
+#include <stdarg.h>
 
 #define BUFSIZE  1024
 #define DELIMETERS " \n\t\r\a"
 
 extern char **environ;
-/*extern int exit_status;*/
 
 /**
 * struct shell_info - structure to handle
@@ -73,6 +73,7 @@ void _puts(char *str);
 /*--more functions--*/
 int _isdigit(char *str);
 int _atoi(const char *str);
+void _free(int count, ...);
 
 
 #endif

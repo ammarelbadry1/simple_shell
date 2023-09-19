@@ -66,8 +66,7 @@ int exit_cmd(char **tokens, char *lineptr, char **env)
 		if (_isdigit(tokens[1]) == 0)
 		{
 			exit_error(tokens[1]);
-			free(tokens);
-			free(lineptr);
+			_free(2, tokens, lineptr);
 			shell_exit.status = 2;
 			exit(shell_exit.status);
 		}
@@ -76,19 +75,16 @@ int exit_cmd(char **tokens, char *lineptr, char **env)
 			shell_exit.status = _atoi(tokens[1]);
 			if (shell_exit.status < 0)
 			{
-				free(tokens);
-				free(lineptr);
+				_free(2, tokens, lineptr);
 				shell_exit.status = 2;
 				exit(shell_exit.status);
 			}
-			free(tokens);
-			free(lineptr);
+			_free(2, tokens, lineptr);
 			exit(shell_exit.status);
 		}
 	}
 
-	free(tokens);
-	free(lineptr);
+	_free(2, tokens, lineptr);
 	shell_exit.status = 0;
 	exit(shell_exit.status);
 }

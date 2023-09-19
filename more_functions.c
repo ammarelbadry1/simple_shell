@@ -54,3 +54,26 @@ int _isdigit(char *str)
 	}
 	return (1);
 }
+
+/**
+ * _free - function that free memory allocation
+ *
+ * @count: number of arguements
+ *
+ * Return: no return
+ */
+void _free(int count, ...)
+{
+	int i = 0;
+	char *ptr;
+	va_list args_ptr;
+
+	va_start(args_ptr, count);
+	while (i < count)
+	{
+		ptr = va_arg(args_ptr, char *);
+		free(ptr);
+		i++;
+	}
+	va_end(args_ptr);
+}

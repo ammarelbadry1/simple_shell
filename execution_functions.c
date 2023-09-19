@@ -1,6 +1,5 @@
 #include "shell.h"
 
-/*int	exit_status = 0;*/
 /**
  * cmd_execute - function that check user commands
  *		and execute them
@@ -39,8 +38,7 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
 		if (!path)
 		{
 			cmd_error(tokens[0]);
-			free(tokens);
-			free(lineptr);
+			_free(2, tokens, lineptr);
 			shell_exit.status = 127;
 			exit(shell_exit.status);
 		}
@@ -84,8 +82,7 @@ int fullpath_execution(char **tokens, char *lineptr, int path_var_access_flag)
 		if (execve(tokens[0], tokens, NULL) == -1)
 		{
 			cmd_error(tokens[0]);
-			free(tokens);
-			free(lineptr);
+			_free(2, tokens, lineptr);
 			shell_exit.status = 127;
 			exit(shell_exit.status);
 		}
