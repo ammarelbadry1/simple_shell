@@ -13,7 +13,17 @@
 #define DELIMETERS " \n\t\r\a"
 
 extern char **environ;
-extern int exit_status;
+/*extern int exit_status;*/
+
+/**
+* struct shell_info - structure to handle
+*		shell informations
+* @status: shell status
+*/
+struct shell_info
+{
+	int status;
+};
 
 /**
 * struct builtin - structure to handle builtin commands

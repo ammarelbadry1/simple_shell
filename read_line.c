@@ -10,6 +10,7 @@ char *read_line(void)
 	char *buffer = NULL;
 	size_t length = 0;
 	ssize_t n_read;
+	struct shell_info shell_exit;
 
 	/*read user command by getline()*/
 	n_read = getline(&buffer, &length, stdin);
@@ -18,8 +19,8 @@ char *read_line(void)
 	if (n_read == -1)
 	{
 		free(buffer);
-		exit_status = 0;
-		exit(exit_status);
+		shell_exit.status = 0;
+		exit(shell_exit.status);
 	}
 
 	return (buffer);

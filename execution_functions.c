@@ -1,6 +1,6 @@
 #include "shell.h"
 
-int	exit_status = 0;
+/*int	exit_status = 0;*/
 /**
  * cmd_execute - function that check user commands
  *		and execute them
@@ -16,6 +16,7 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
 	char *path;
 	int shell_exit_flag = 1, path_var_access_flag = 0;
 	int (*check_builtin)(char **, char *, char **);
+	struct shell_info shell_exit;
 
 	/*handle case of spaces*/
 	if (tokens == NULL || tokens[0] == NULL)
@@ -40,8 +41,8 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
 			cmd_error(tokens[0]);
 			free(tokens);
 			free(lineptr);
-			exit_status = 127;
-			exit(exit_status);
+			shell_exit.status = 127;
+			exit(shell_exit.status);
 		}
 		else
 		{
@@ -69,13 +70,14 @@ int fullpath_execution(char **tokens, char *lineptr, int path_var_access_flag)
 {
 	pid_t pid;
 	int child_status;
+	struct shell_info shell_exit;
 
 	pid = fork();
 	if (pid < 0)
 	{
 		perror("fork");
-		exit_status = EXIT_FAILURE;
-		exit(exit_status);
+		shell_exit.status = EXIT_FAILURE;
+		exit(shell_exit.status);
 	}
 	else if (pid == 0)
 	{
@@ -84,8 +86,8 @@ int fullpath_execution(char **tokens, char *lineptr, int path_var_access_flag)
 			cmd_error(tokens[0]);
 			free(tokens);
 			free(lineptr);
-			exit_status = 127;
-			exit(exit_status);
+			shell_exit.status = 127;
+			exit(shell_exit.status);
 		}
 	}
 	else
@@ -95,7 +97,7 @@ int fullpath_execution(char **tokens, char *lineptr, int path_var_access_flag)
 		do {
 			waitpid(pid, &child_status, WUNTRACED);
 		} while (!WIFEXITED(child_status) && !WIFSIGNALED(child_status));
-		exit_status = WEXITSTATUS(child_status);
+		shell_exit.status = WEXITSTATUS(child_status);
 	}
 
 	return (1);

@@ -13,8 +13,10 @@ int main(int argc, char **argv, char **env)
 {
 	char *lineptr = NULL, **tokens = NULL;
 	int shell_exit_flag = 1;
+	struct shell_info shell_exit;
 	(void) argc, (void) argv;
 
+	shell_exit.status = 0;
 	while (shell_exit_flag)
 	{
 		/*print prompt sign*/
@@ -35,5 +37,5 @@ int main(int argc, char **argv, char **env)
 		free(tokens);
 	}
 
-	return (exit_status);
+	return (shell_exit.status);
 }

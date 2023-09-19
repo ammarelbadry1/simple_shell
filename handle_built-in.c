@@ -58,6 +58,7 @@ int handle_env(char **tokens, char *lineptr, char **env)
  */
 int exit_cmd(char **tokens, char *lineptr, char **env)
 {
+	struct shell_info shell_exit;
 	(void) env;
 
 	if (tokens[1])
@@ -67,29 +68,29 @@ int exit_cmd(char **tokens, char *lineptr, char **env)
 			exit_error(tokens[1]);
 			free(tokens);
 			free(lineptr);
-			exit_status = 2;
-			exit(exit_status);
+			shell_exit.status = 2;
+			exit(shell_exit.status);
 		}
 		else
 		{
-			exit_status = _atoi(tokens[1]);
-			if (exit_status < 0)
+			shell_exit.status = _atoi(tokens[1]);
+			if (shell_exit.status < 0)
 			{
 				free(tokens);
 				free(lineptr);
-				exit_status = 2;
-				exit(exit_status);
+				shell_exit.status = 2;
+				exit(shell_exit.status);
 			}
 			free(tokens);
 			free(lineptr);
-			exit(exit_status);
+			exit(shell_exit.status);
 		}
 	}
 
 	free(tokens);
 	free(lineptr);
-	exit_status = 0;
-	exit(exit_status);
+	shell_exit.status = 0;
+	exit(shell_exit.status);
 }
 
 /**
