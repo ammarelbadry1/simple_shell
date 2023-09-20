@@ -33,8 +33,7 @@ int main(int argc, char **argv, char **env)
 		tokens = parse_args(lineptr);
 		shell_exit_flag = cmd_execute(tokens, lineptr, env);
 
-		free(lineptr);
-		free(tokens);
+		_free(2, lineptr, tokens);
 	}
 
 	return (shell_exit.status);

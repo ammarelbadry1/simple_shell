@@ -10,7 +10,7 @@
 */
 char *_getenv(char *name)
 {
-	char *env_var, **env;
+	char *env_var = NULL, **env = NULL;
 	int i, is_found = 0;
 
 	env = environ;
@@ -45,7 +45,7 @@ char *_getenv(char *name)
 */
 char *check_cmd_in_PATH(char *cmd)
 {
-	char *path_var, *cmd_path, *tmp;
+	char *path_var = NULL, *cmd_path = NULL, *tmp = NULL;
 
 	path_var = _getenv("PATH");
 	if (path_var == NULL)
@@ -74,7 +74,6 @@ char *check_cmd_in_PATH(char *cmd)
 		free(cmd_path);
 		cmd_path = strtok(NULL, ":");
 	}
-	free(path_var);
-	free(cmd_path);
+	_free(2, path_var, cmd_path);
 	return (NULL);
 }

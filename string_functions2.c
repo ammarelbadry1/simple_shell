@@ -3,38 +3,30 @@
 /**
  * _strdup - copy a string to a newely allocated space
  *
- * @str: String to be copied
+ * @s: String to be copied
  *
  * Return: On success a pointer to a duplicated string
  * On failure NULL
 */
-char *_strdup(char *str)
+char *_strdup(char *s)
 {
-	char *my_str;
-	int str_length;
-	int i;
+	char *str = NULL;
+	int s_len, i = 0;
 
+	s_len = _strlen(s);
+	str = malloc(sizeof(char) * s_len + 1);
 	if (str == NULL)
 		return (NULL);
 
-	str_length = 0;
-	while (str[str_length] != 0)
-		str_length++;
-	my_str = malloc(str_length * sizeof(char));
-
-	if (my_str == NULL)
+	while (*s != '\0' && i < s_len)
 	{
-		free(my_str);
-		return (NULL);
-	}
-
-	i = 0;
-	while (i < str_length)
-	{
-		my_str[i] = str[i];
+		str[i] = *s;
+		s++;
 		i++;
 	}
-	return (my_str);
+	str[i] = '\0';
+
+	return (str);
 }
 
 /**
@@ -72,7 +64,7 @@ int _strcmp(char *s1, char *s2)
 */
 char *str_concat(char *s1, char *s2)
 {
-	char *my_str;
+	char *my_str = NULL;
 	int s1_len, s2_len;
 	int i;
 
@@ -89,7 +81,7 @@ char *str_concat(char *s1, char *s2)
 	while (s2[s2_len] != 0)
 		s2_len++;
 	s2_len++;
-	my_str = malloc((s1_len + s2_len - 1) * sizeof(char));
+	my_str = malloc((s1_len + s2_len + 1) * sizeof(char));
 
 	if (my_str == NULL)
 	{

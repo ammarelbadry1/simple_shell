@@ -12,7 +12,7 @@
  */
 int cmd_execute(char **tokens, char *lineptr, char **env)
 {
-	char *path;
+	char *path = NULL;
 	int shell_exit_flag = 1, path_var_access_flag = 0;
 	int (*check_builtin)(char **, char *, char **);
 	struct shell_info shell_exit;
@@ -27,6 +27,7 @@ int cmd_execute(char **tokens, char *lineptr, char **env)
 		shell_exit_flag = check_builtin(tokens, lineptr, env);
 		return (shell_exit_flag);
 	}
+	/*check if command sent in full path or check for its path*/
 	if (access(tokens[0], X_OK) == 0)
 	{
 		shell_exit_flag = fullpath_execution(tokens, lineptr, path_var_access_flag);
