@@ -67,7 +67,6 @@ char *_strcat(char *dest, const char *src);
 char *_strdup(char *s);
 int _strcmp(char *s1, char *s2);
 char *str_concat(char *s1, char *s2);
-char *_strncpy(char *dest, char *src, int n);
 void _puts(char *str);
 
 /*--more functions--*/
